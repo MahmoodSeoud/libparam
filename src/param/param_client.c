@@ -8,7 +8,11 @@
 #include <param/param_client.h>
 
 #include <stdio.h>
+#ifdef __APPLE__
+#include <stdlib.h>
+#else
 #include <malloc.h>
+#endif
 #include <inttypes.h>
 #include <param/param.h>
 #include <csp/csp.h>

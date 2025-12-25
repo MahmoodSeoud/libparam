@@ -16,7 +16,24 @@ extern "C" {
 #define VMEM_MIN(a,b) ((a) < (b) ? a : b)
 
 #include <stddef.h>
+#ifdef __APPLE__
+#include <machine/endian.h>
+#include <libkern/OSByteOrder.h>
+#define htobe16(x) OSSwapHostToBigInt16(x)
+#define htobe32(x) OSSwapHostToBigInt32(x)
+#define htobe64(x) OSSwapHostToBigInt64(x)
+#define be16toh(x) OSSwapBigToHostInt16(x)
+#define be32toh(x) OSSwapBigToHostInt32(x)
+#define be64toh(x) OSSwapBigToHostInt64(x)
+#define htole16(x) OSSwapHostToLittleInt16(x)
+#define htole32(x) OSSwapHostToLittleInt32(x)
+#define htole64(x) OSSwapHostToLittleInt64(x)
+#define le16toh(x) OSSwapLittleToHostInt16(x)
+#define le32toh(x) OSSwapLittleToHostInt32(x)
+#define le64toh(x) OSSwapLittleToHostInt64(x)
+#else
 #include <endian.h>
+#endif
 #include <param/param.h>
 
 enum vmem_types{
@@ -77,6 +94,9 @@ vmem_t * vmem_vaddr_to_vmem(uint64_t vaddr);
 int vmem_flush(vmem_t *vmem);
 
 extern int __start_vmem __attribute__((weak)), __stop_vmem __attribute__((weak));
+
+/* Add vmem entries from section boundaries */
+void vmem_add(void *start, void *stop);
 
 #ifdef __cplusplus
 }
