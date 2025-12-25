@@ -23,6 +23,14 @@
 #define MIN(a,b) (((a)<(b))?(a):(b))
 #endif
 
+/* Helper function for hex parsing */
+static int hex_nibble(char c) {
+	if (c >= '0' && c <= '9') return      c - '0';
+	if (c >= 'A' && c <= 'F') return 10 + c - 'A';
+	if (c >= 'a' && c <= 'f') return 10 + c - 'a';
+	return -1;
+}
+
 #ifndef SCNd8
 #define __SCN8(x) __INT8 __STRINGIFY(x)
 #define SCNd8       __SCN8(d)
@@ -178,8 +186,8 @@ int param_str_to_value(param_type_e type, char *in, void *out) {
 			return -1;
 
 		for (int i = 0; i < len; i++) {
-			int nibble1 = nibble(in[i*2]);
-			int nibble2 = nibble(in[i*2+1]);
+			int nibble1 = hex_nibble(in[i*2]);
+			int nibble2 = hex_nibble(in[i*2+1]);
 			if (nibble1 < 0 || nibble2 < 0) return -1;
 			((char *) out)[i] = (nibble1 << 4) + nibble2;
 		}

@@ -8,7 +8,7 @@
 #include <param/param_client.h>
 
 #include <stdio.h>
-#include <malloc.h>
+#include <stdlib.h>
 #include <inttypes.h>
 #include <param/param.h>
 #include <csp/csp.h>

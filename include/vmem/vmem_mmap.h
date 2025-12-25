@@ -14,12 +14,18 @@ typedef struct {
 void vmem_mmap_read(vmem_t * vmem, uint64_t addr, void * dataout, uint32_t len);
 void vmem_mmap_write(vmem_t * vmem, uint64_t addr, const void * datain, uint32_t len);
 
+#ifdef __APPLE__
+#define VMEM_SECTION_ATTR __attribute__((section("__DATA,vmem")))
+#else
+#define VMEM_SECTION_ATTR __attribute__((section("vmem")))
+#endif
+
 #define VMEM_DEFINE_MMAP(name_in, strname, filename_in, size_in) \
 	static vmem_mmap_driver_t vmem_mmap_##name_in##_driver = { \
 		.physaddr = 0, \
 		.filename = filename_in, \
 	}; \
-	__attribute__((section("vmem"))) \
+	VMEM_SECTION_ATTR \
 	__attribute__((__aligned__(__alignof__(vmem_t)))) \
 	__attribute__((used)) \
 	vmem_t vmem_mmap_##name_in = { \
